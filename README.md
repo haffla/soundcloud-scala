@@ -1,1 +1,3 @@
-# soundcloud-scala
+## soundcloud-scala
+
+A friendly wrapper around Soundcloud's API.
