@@ -66,13 +66,7 @@ class Client(clientId:String, clientSecret:Option[String] = None, redirectUri:Op
     val response = Http(request OK as.String)
     for (r <- response)
       yield {
-        val json = parse(r).values
-        subResource match {
-          case s if s.matches("^[a-z][a-z]*$") =>
-            json.asInstanceOf[List[anyMap]]
-          case _ =>
-            json.asInstanceOf[anyMap]
-        }
+        parse(r).values
       }
   }
 }
