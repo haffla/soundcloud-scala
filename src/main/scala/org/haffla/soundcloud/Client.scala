@@ -47,8 +47,8 @@ class Client(clientId:String, clientSecret:Option[String] = None, redirectUri:Op
       case None =>
         throw new Exception(
           "In order to authenticate against Soundcloud you have to provide your client_secret and a redirect_uri")
-      case _ =>
-        authParameters.get + ("code" -> code)
+      case Some(parameters) =>
+        parameters + ("code" -> code)
     }
     val request = url(host + "/oauth2/token") << params
     val response = Http(request OK as.String)
@@ -57,12 +57,12 @@ class Client(clientId:String, clientSecret:Option[String] = None, redirectUri:Op
   }
 
   private def doRequest(resource:String, id:String)(subResource:String, limit:Int) = {
-    val _u = host + s"/$resource/$id/$subResource?client_id=$clientId"
-    val _url = limit match {
-      case -1 => _u
-      case _ => _u + s"&limit=$limit"
+    val withoutLimit = host + s"/$resource/$id/$subResource?client_id=$clientId"
+    val urL = limit match {
+      case -1 => withoutLimit
+      case _ => withoutLimit + s"&limit=$limit"
     }
-    val request = url(_url)
+    val request = url(urL)
     val response = Http(request OK as.String)
     for (r <- response)
       yield {
