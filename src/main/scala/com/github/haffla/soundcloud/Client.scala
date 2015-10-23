@@ -1,4 +1,4 @@
-package org.haffla.soundcloud
+package com.github.haffla.soundcloud
 
 import dispatch.Defaults._
 import dispatch._

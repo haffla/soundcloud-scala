@@ -1,4 +1,4 @@
-package org.haffla.soundcloud
+package com.github.haffla.soundcloud
 
 import org.scalatest._
 import org.scalatest.time.{Millis, Span, Seconds}

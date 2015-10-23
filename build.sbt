@@ -1,6 +1,6 @@
 name := "Soundcloud Scala"
 
-organization := "org.haffla"
+organization := "com.github.haffla"
 
 version := "0.1-SNAPSHOT"
 
@@ -12,7 +12,6 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )
 
-
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
   if (isSnapshot.value)
@@ -20,6 +19,8 @@ publishTo := {
   else
     Some("releases"  at nexus + "service/local/staging/deploy/maven2")
 }
+
+publishMavenStyle := true
 
 publishArtifact in Test := false
 
