@@ -8,9 +8,10 @@ scalaVersion := "2.11.7"
 
 libraryDependencies ++= Seq(
   "net.databinder.dispatch" %% "dispatch-core" % "0.11+",
-  "net.liftweb" %% "lift-json" % "2s",
+  "net.liftweb" %% "lift-json" % "[2.5+,2.6+]",
   "org.scalatest" % "scalatest_2.11" % "2.2.4" % "test"
 )
+
 
 publishTo := {
   val nexus = "https://oss.sonatype.org/"
