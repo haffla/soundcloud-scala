@@ -24,8 +24,6 @@ publishMavenStyle := true
 
 publishArtifact in Test := false
 
-publishTo := Some(Resolver.file("file",  new File( "/home/jacke/.ivy2/local" )) )
-
 pomIncludeRepository := { _ => false }
 
 pomExtra :=
