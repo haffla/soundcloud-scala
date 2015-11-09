@@ -45,11 +45,11 @@ In case you only need simple access to Soundcloud's API, that is without OAuth2 
 	import com.github.haffla.soundcloud.Client	
 
 	class MyController extends Controller {
-	
-	  val client = Client(clientId = %YOUR_CLIENT_ID%,
-                      clientSecret = %YOUR_CLIENT_SECRET%,
-                      // replace with your own redirect uri
-                      redirectUri = "http://localhost:9000/soundcloud/callback")
+		
+	  /* Replace with your own redirect uri. 
+	  This is just an example from my development machine */
+	  val client = Client(%YOUR_CLIENT_ID%, %YOUR_CLIENT_SECRET%, 
+  						  "http://localhost:9000/soundcloud/callback")
                       
       val queryString:Map[String,Seq[String]] = Map(
   	    "response_type" -> Seq("code"),
@@ -70,24 +70,22 @@ In case you only need simple access to Soundcloud's API, that is without OAuth2 
 	    
 	    /* Now use that code to get a real access token from Soundcloud */
 	    val authCredentials:Future[String] = client.exchange_token(code)
+	    
 	    authCredentials map { jsonString =>
 		    val json = Json.parse(jsonString)
 		    val accessToken = (json \ "access_token").asOpt[String]
 			
-			/* 
-			With this access token you can access Soundcloud's /me endpoint.
-			Maybe get the currently logged in user's favourite music? 
-			*/
+			/* With this access token you can access Soundcloud's /me endpoint.
+			Maybe get the currently logged in user's favourite music? */
 			
 			client.me(token)() map { user =>
 		        val userId = (Json.parse(user) \ "id").as[Int].toString
 		        client.users(userId)("favorites") map { favourites =>
 			      val usersFavouriteMusic = Json.parse(favourites)
-			      ...
-			    }
+			      
+			}
+			// do something with this..
 	        }
-			...
-		}
-		...
+	     }
 	  }
 	}
