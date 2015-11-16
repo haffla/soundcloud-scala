@@ -19,13 +19,13 @@ In case you only need simple access to Soundcloud's API, that is without OAuth2 
 ```scala
 import com.github.haffla.soundcloud.Client
     
-// use whatever Json library you prefer
+/* use whatever Json library you prefer */
 import play.api.libs.json.Json
 
 val client = Client(%YOUR_CLIENT_ID%)
 val someUser:Future[String] = client.users("6563020")()
-// All methods return a Future[String], i.e. it's JSON.
-    
+
+/* All methods return a Future[String], i.e. it's JSON */
 someUser map {
 	user => 
 		val json = Json.parse(user)
@@ -39,7 +39,7 @@ val commentsOfSomeTrack = client.tracks("13158665")("comments")
 client.users("6563020")("followers", 2)
 ```
 
-#### Full example with OAuth2 flow using Play framework 
+#### Full example with OAuth2 flow using Play framework
 
 ```scala
 import com.github.haffla.soundcloud.Client	
@@ -59,6 +59,9 @@ val queryString:Map[String,Seq[String]] = Map(
   )
 	  
 def login = Action { implicit request =>
+  /* Redirect the user to the authorization endpoint where s/he will 
+   * and hopefully authorize your application
+   */
   Redirect("https://api.soundcloud.com/connect", queryString)
 }
 		
@@ -76,8 +79,8 @@ authCredentials map { jsonString =>
   val accessToken = (json \ "access_token").as[String]
 		
   /* With this access token you can access Soundcloud's /me endpoint.
-  Maybe get the currently logged in user's favourite music? */
-			
+   * Maybe get the currently logged in user's favourite music? 
+   */
   client.me(accessToken)() map { user =>
     val userId = (Json.parse(user) \ "id").as[Int].toString
     client.users(userId)("favorites") map { favourites =>
