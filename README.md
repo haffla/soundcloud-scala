@@ -22,7 +22,7 @@ import com.github.haffla.soundcloud.Client
 /* use whatever Json library you prefer */
 import play.api.libs.json.Json
 
-val client = Client(%YOUR_CLIENT_ID%)
+val client = Client("YOUR_CLIENT_ID")
 val someUser:Future[String] = client.users("6563020")()
 
 /* All methods return a Future[String], i.e. it's JSON */
@@ -46,9 +46,11 @@ import com.github.haffla.soundcloud.Client
 
 class MyController extends Controller {
 		
-/* Replace with your own redirect uri. 
-This is just an example from my development machine */
-val client = Client(%YOUR_CLIENT_ID%, %YOUR_CLIENT_SECRET%, 
+/* 
+ * Replace with your own redirect uri.
+ * This is just an example from my development machine 
+ */
+val client = Client("YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET", 
   		"http://localhost:9000/soundcloud/callback")
                       
 val queryString:Map[String,Seq[String]] = Map(
@@ -86,9 +88,9 @@ authCredentials map { jsonString =>
     client.users(userId)("favorites") map { favourites =>
       val usersFavouriteMusic = Json.parse(favourites)
       // do something with this..
-      }
         }
-     }
+      }
+    }
   }
 }
 ```
