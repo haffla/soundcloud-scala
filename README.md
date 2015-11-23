@@ -67,7 +67,7 @@ class MyController extends Controller {
     Redirect("https://api.soundcloud.com/connect", queryString)
   }
 		
-/* This is your callback where Soundcloud redirects you after login */
+  /* This is your callback where Soundcloud redirects you after login */
   def callback = Action.async { implicit request =>
 	  
     /* get the code that Soundcloud is sending you */
