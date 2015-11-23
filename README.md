@@ -46,51 +46,51 @@ import com.github.haffla.soundcloud.Client
 
 class MyController extends Controller {
 		
-/* 
- * Replace with your own redirect uri.
- * This is just an example from my development machine 
- */
-val client = Client("YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET", 
+  /* 
+   * Replace with your own redirect uri.
+   * This is just an example from my development machine 
+   */
+  val client = Client("YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET", 
   		"http://localhost:9000/soundcloud/callback")
                       
-val queryString:Map[String,Seq[String]] = Map(
-  "response_type" -> Seq("code"),
-  "client_id" -> Seq(%YOUR_CLIENT_ID%),
-  "redirect_uri" -> Seq(%YOUR_REDIRECT_URI%),
-  "scope" -> Seq("non-expiring")
-  )
+  val queryString:Map[String,Seq[String]] = Map(
+    "response_type" -> Seq("code"),
+    "client_id" -> Seq(%YOUR_CLIENT_ID%),
+    "redirect_uri" -> Seq(%YOUR_REDIRECT_URI%),
+    "scope" -> Seq("non-expiring")
+    )
 	  
-def login = Action { implicit request =>
-  /* Redirect the user to the authorization endpoint where s/he will 
-   * and hopefully authorize your application
-   */
-  Redirect("https://api.soundcloud.com/connect", queryString)
-}
+  def login = Action { implicit request =>
+    /* Redirect the user to the authorization endpoint where s/he will 
+     * and hopefully authorize your application
+     */
+    Redirect("https://api.soundcloud.com/connect", queryString)
+  }
 		
 /* This is your callback where Soundcloud redirects you after login */
-def callback = Action.async { implicit request =>
+  def callback = Action.async { implicit request =>
 	  
-/* get the code that Soundcloud is sending you */
-val code = request.getQueryString("code").orNull //orNull is bad...
+    /* get the code that Soundcloud is sending you */
+    val code = request.getQueryString("code").orNull //orNull is bad...
     
-/* Now use that code to get a real access token from Soundcloud */
-val authCredentials:Future[String] = client.exchange_token(code)
+    /* Now use that code to get a real access token from Soundcloud */
+    val authCredentials:Future[String] = client.exchange_token(code)
 	    
-authCredentials map { jsonString =>
-  val json = Json.parse(jsonString)
-  val accessToken = (json \ "access_token").as[String]
+    authCredentials map { jsonString =>
+      val json = Json.parse(jsonString)
+    val accessToken = (json \ "access_token").as[String]
 		
-  /* With this access token you can access Soundcloud's /me endpoint.
-   * Maybe get the currently logged in user's favourite music? 
-   */
-  client.me(accessToken)() map { user =>
-    val userId = (Json.parse(user) \ "id").as[Int].toString
-    client.users(userId)("favorites") map { favourites =>
-      val usersFavouriteMusic = Json.parse(favourites)
-      // do something with this..
+    /* With this access token you can access Soundcloud's /me endpoint.
+     * Maybe get the currently logged in user's favourite music? 
+     */
+      client.me(accessToken)() map { user =>
+        val userId = (Json.parse(user) \ "id").as[Int].toString
+        client.users(userId)("favorites") map { favourites =>
+          val usersFavouriteMusic = Json.parse(favourites)
+          // do something with this..
+            }
+          }
         }
-      }
     }
-  }
 }
 ```
