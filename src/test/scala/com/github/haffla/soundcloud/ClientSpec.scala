@@ -14,11 +14,13 @@ class ClientSpec extends FlatSpec with Matchers with ScalaFutures {
 
   implicit val defaultPatience = PatienceConfig(timeout = Span(2, Seconds), interval = Span(500, Millis))
 
+  val keyUsername = "username"
+
   "The Client" should "get a user's profile correctly" in {
     val res = client.users("6563020")()
     whenReady(res) { result =>
       val js = Json.parse(result)
-      (js \ "username").as[String] should equal("haffla")
+      (js \ keyUsername).as[String] should equal("haffla")
       (js \ "favorite_dog").asOpt[String] should be(None)
       (js \ "city").as[String] should equal("Berlin")
     }
@@ -31,7 +33,10 @@ class ClientSpec extends FlatSpec with Matchers with ScalaFutures {
       val js = Json.parse(result)
       val jsList = (js \ "collection").as[List[JsValue]]
       jsList.size should equal(limit)
-      (jsList.head \ "username").as[String] should equal("Christian Kroter")
+      jsList.headOption match {
+        case Some(jsL) => (jsL \ keyUsername).as[String] should equal("Christian Kroter")
+        case _ => true should equal(false)
+      }
     }
   }
 }
