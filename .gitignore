@@ -1,5 +1,6 @@
 .idea
 project
+!project/plugins.sbt
 target
 src/main/scala/Main.scala
 

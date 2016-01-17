@@ -5,3 +5,8 @@ scala:
 jdk:
    - oraclejdk8
    - oraclejdk7
+
+script:
+  - sbt clean coverage test
+  - sbt coverageReport
+  - sbt codacyCoverage
