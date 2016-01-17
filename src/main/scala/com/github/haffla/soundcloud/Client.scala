@@ -44,24 +44,21 @@ class Client(clientId:String, clientSecret:Option[String] = None, redirectUri:Op
         parameters + ("code" -> code)
     }
     val request = url(host + "/oauth2/token") << params
-    val response = Http(request OK as.String)
-    for (r <- response) yield r
+    Http(request OK as.String)
   }
 
   private def request(resource:String, id:String)(subResource:String, limit:Int): Future[String] = {
     val withoutLimit = host + s"/$resource/$id/$subResource?client_id=$clientId"
     val urL = addLimit(withoutLimit, limit)
     val request = url(urL)
-    val response = Http(request OK as.String)
-    for (r <- response) yield r
+    Http(request OK as.String)
   }
 
   private def meRequest(resource: String, oauthToken: String, limit:Int): Future[String] = {
     val withoutLimit = host + s"/me/$resource?oauth_token=$oauthToken"
     val urL = addLimit(withoutLimit, limit)
     val request = url(urL)
-    val response = Http(request OK as.String)
-    for (r <- response) yield r
+    Http(request OK as.String)
   }
 
   // Helper ---------------------

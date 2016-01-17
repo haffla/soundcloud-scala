@@ -6,8 +6,11 @@ version := "0.1-SNAPSHOT"
 
 scalaVersion := "2.11.7"
 
+resolvers += "Typesafe Repo" at "http://dl.bintray.com/typesafe/maven-releases"
+
 libraryDependencies ++= Seq(
   "net.databinder.dispatch" %% "dispatch-core" % "0.11.3",
+  "com.typesafe.play" %% "play-json" % "2.3.0",
   "net.liftweb" %% "lift-json" % "[2.5+,2.6+]" % "test",
   "org.scalatest" %% "scalatest" % "2.2.4" % "test"
 )

@@ -4,6 +4,7 @@ import org.scalatest._
 import org.scalatest.time.{Millis, Span, Seconds}
 import org.scalatest.concurrent.ScalaFutures
 import net.liftweb.json._
+import play.api.libs.json.{JsValue, Json}
 
 class ClientSpec extends FlatSpec with Matchers with ScalaFutures {
 
@@ -16,10 +17,10 @@ class ClientSpec extends FlatSpec with Matchers with ScalaFutures {
   "The Client" should "get a user's profile correctly" in {
     val res = client.users("6563020")()
     whenReady(res) { result =>
-      val ob = parse(result).values.asInstanceOf[Map[String,Any]]
-      ob.get("username") should equal(Some("haffla"))
-      ob.get("favorite_dog") should be(None)
-      ob.get("city") should be(Some("Berlin"))
+      val js = Json.parse(result)
+      (js \ "username").as[String] should equal("haffla")
+      (js \ "favorite_dog").asOpt[String] should be(None)
+      (js \ "city").as[String] should equal("Berlin")
     }
   }
 
@@ -27,9 +28,10 @@ class ClientSpec extends FlatSpec with Matchers with ScalaFutures {
     val limit = 2
     val res = client.users("6563020")("followers", limit)
     whenReady(res) { result =>
-      val ob = parse(result).values.asInstanceOf[List[Map[String,Any]]]
-      ob.size should equal(limit)
-      ob.head("username") should equal("Christian Kroter")
+      val js = Json.parse(result)
+      val jsList = (js \ "collection").as[List[JsValue]]
+      jsList.size should equal(limit)
+      (jsList.head \ "username").as[String] should equal("Christian Kroter")
     }
   }
 }
