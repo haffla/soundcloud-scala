@@ -22,7 +22,7 @@ import com.github.haffla.soundcloud.Client
 /* use whatever Json library you prefer */
 import play.api.libs.json.Json
 
-val client = Client("YOUR_CLIENT_ID")
+val client = Client("%YOUR_CLIENT_ID%")
 val someUser:Future[String] = client.users("6563020")()
 
 /* All methods return a Future[String], i.e. it's JSON */
@@ -50,19 +50,19 @@ class MyController extends Controller {
    * Replace with your own redirect uri.
    * This is just an example from my development machine 
    */
-  val client = Client("YOUR_CLIENT_ID", "YOUR_CLIENT_SECRET", 
+  val client = Client("%YOUR_CLIENT_ID%", "%YOUR_CLIENT_SECRET%", 
   		"http://localhost:9000/soundcloud/callback")
                       
   val queryString:Map[String,Seq[String]] = Map(
     "response_type" -> Seq("code"),
-    "client_id" -> Seq(%YOUR_CLIENT_ID%),
-    "redirect_uri" -> Seq(%YOUR_REDIRECT_URI%),
+    "client_id" -> Seq("%YOUR_CLIENT_ID%"),
+    "redirect_uri" -> Seq("%YOUR_REDIRECT_URI%"),
     "scope" -> Seq("non-expiring")
     )
 	  
   def login = Action { implicit request =>
     /* Redirect the user to the authorization endpoint where s/he will 
-     * and hopefully authorize your application
+     * hopefully authorize your application
      */
     Redirect("https://api.soundcloud.com/connect", queryString)
   }
