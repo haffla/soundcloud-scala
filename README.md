@@ -78,11 +78,11 @@ class MyController extends Controller {
 	    
     authCredentials map { jsonString =>
       val json = Json.parse(jsonString)
-    val accessToken = (json \ "access_token").as[String]
+      val accessToken = (json \ "access_token").as[String]
 		
-    /* With this access token you can access Soundcloud's /me endpoint.
-     * Maybe get the currently logged in user's favourite music? 
-     */
+      /* With this access token you can access Soundcloud's /me endpoint.
+       * Maybe get the currently logged in user's favourite music? 
+       */
       client.me(accessToken)() map { user =>
         val userId = (Json.parse(user) \ "id").as[Int].toString
         client.users(userId)("favorites") map { favourites =>
